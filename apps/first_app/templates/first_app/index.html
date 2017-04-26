@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>index</title>
+  </head>
+  <body>
+    {% for error in messages %}
+    <p>{{ error }}</p>
+    {% endfor %}
+    {% for a in all_users %}
+    <p>{{ a.email }} {{ a.password }}</p>
+    {% endfor %}
+    <form id="a" action='/register' method='POST'>
+      {% csrf_token %}
+      <p>First name:<input type='text' name='first_name'></p>
+      <p>Last name:<input type='text' name='last_name'></p>
+      <p>Email:<input type='text' name='email'></p>
+      <p>Password:<input type='password' name='password' value='password1'></p>
+      <p>Confirm password:<input type='password' name='confirmpw' value='password1'></p>
+      <input type='submit' name='register' value='Register'>
+    </form>
+    <form id="ab" action='/login' method='POST'>
+      {% csrf_token %}
+      <p>Email:<input type='text' name='email'></p>
+      <p>Password:<input type='password' name='password' value='password1'></p>
+      <input type='submit' name='login' value='Log In'>
+    </form>
+  </body>
+</html>
