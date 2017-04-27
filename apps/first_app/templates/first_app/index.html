@@ -8,9 +8,9 @@
     {% for error in messages %}
     <p>{{ error }}</p>
     {% endfor %}
-    {% for a in all_users %}
+    <!-- {% for a in all_users %}
     <p>{{ a.email }} {{ a.password }}</p>
-    {% endfor %}
+    {% endfor %} -->
     <form id="a" action='/register' method='POST'>
       {% csrf_token %}
       <p>First name:<input type='text' name='first_name'></p>

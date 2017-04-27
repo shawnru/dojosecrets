@@ -3,17 +3,38 @@
   <head>
     <meta charset="utf-8">
     <title>index</title>
+    {% load humanize %}
   </head>
   <body>
-    {% for x in all_secrets %}
-
-    {% endfor %}
-    <form id="a" action="{% url 'secrets:secroot' %}" method='POST'>
+    <form id="a" action="{% url 'secrets:seclout' %}" method='POST'>
+      {% csrf_token %}
+      <input type='submit' name='post' value='Log-Out'>
+    </form>
+    <form id="a" action="{% url 'secrets:secadd' %}" method='POST'>
       {% csrf_token %}
       <p><input type='text' name='secret' value="Your secret here!"></p>
-      <input type='hidden' name='user_id' value="">
+      <input type='hidden' name='user_id' value="{{ request.session.id }}">
       <input type='submit' name='post' value='Post'>
     </form>
+    {% for x in all_secrets %}
+      <p>{{ x.secret }} {{ x.user_likes.count }} {{ x.created_at|timesince }}
+        {% if x.user_id.id == request.session.id %}
+          You posted this:
+          <form id="a" action="{% url 'secrets:secdel' %}" method='POST'>
+            {% csrf_token %}
+            <input type='hidden' name='id' value="{{ x.id }}">
+            <input type='submit' name='post' value='Delete'>
+          </form>
+        {% endif %}
+        {% if x.user_id.id != request.session.id %}
+          <form id="a" action="{% url 'secrets:seclike' %}" method='POST'>
+            {% csrf_token %}
+            <input type='hidden' name='userid' value="{{ x.user_id.id }}">
+            <input type='hidden' name='secid' value="{{ x.id }}">
+            <input type='submit' name='post' value='Like'>
+          </form></p>
+        {% endif %}
+    {% endfor %}
     <a href="{% url 'secrets:secpop' %}">Most popular secrets here</a>
   </body>
 </html>

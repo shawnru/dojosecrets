@@ -6,6 +6,40 @@
   </head>
   <body>
     <h1>Most popular secrets!</h1>
+    {% for x in all_secrets %}
+    <table>
+      <tr>
+        <th>Secret</th>
+        <th>Created at</th>
+        <th>Likes</th>
+      </tr>
+      <tr>
+        <td>{{ x.secret }}</td>
+        <td>{{ x.created_at|timesince }}</td>
+        <td>{{ x.user_likes.count }}</td>
+        <td>
+        {% if x.user_id.id == request.session.id %}
+          You posted this:
+          <form id="a" action="{% url 'secrets:secdel' %}" method='POST'>
+            {% csrf_token %}
+            <input type='hidden' name='id' value="{{ x.id }}">
+            <input type='submit' name='post' value='Delete'>
+          </form>
+        {% endif %}
+        {% if x.user_id.id != request.session.id %}
+        {% if curr_user not in x.user_likes %}
+          <form id="a" action="{% url 'secrets:seclike' %}" method='POST'>
+            {% csrf_token %}
+            <input type='hidden' name='userid' value="{{ x.user_id.id }}">
+            <input type='hidden' name='secid' value="{{ x.id }}">
+            <input type='submit' name='post' value='Like'>
+          </form>
+        {% endif %}
+        {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </table>
     <a href="{% url 'secrets:secroot' %}">Go Back!</a>
   </body>
 </html>
